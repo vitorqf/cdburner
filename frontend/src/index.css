@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+/* ── CDburner Design Tokens ─────────────────────────────────────────
+   Creative North Star: "The Gift Room"
+   Color strategy: Committed warm sage (30-60% of surface)
+   See DESIGN.md for full system rationale.
+──────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Warm sage — the committed surface color */
+  --sage:           hsl(88 18% 44%);
+  --sage-light:     hsl(88 14% 58%);
+  --sage-muted:     hsl(88 10% 72%);
+  --sage-surface:   hsl(88 16% 92%);
+
+  /* Cream neutrals — tinted toward sage, never pure white */
+  --cream:          hsl(46 30% 96%);
+  --cream-mid:      hsl(46 18% 90%);
+  --border:         hsl(46 15% 82%);
+
+  /* Warm darks — tinted toward brown, never pure black */
+  --ink:            hsl(30 15% 14%);
+  --ink-secondary:  hsl(30 10% 36%);
+  --ink-muted:      hsl(30 8% 54%);
+
+  /* Semantic */
+  --background:     hsl(46 30% 96%);
+  --foreground:     hsl(30 15% 14%);
+  --primary:        hsl(88 18% 44%);
+  --primary-fg:     hsl(46 30% 96%);
+  --muted:          hsl(46 18% 90%);
+  --muted-fg:       hsl(30 8% 54%);
+  --destructive:    hsl(0 60% 44%);
+  --destructive-fg: hsl(46 30% 96%);
+  --ring:           hsl(88 18% 44%);
+  --radius:         6px;
+}
+
+@theme inline {
+  --color-sage:          var(--sage);
+  --color-sage-light:    var(--sage-light);
+  --color-sage-muted:    var(--sage-muted);
+  --color-sage-surface:  var(--sage-surface);
+  --color-cream:         var(--cream);
+  --color-cream-mid:     var(--cream-mid);
+  --color-border:        var(--border);
+  --color-ink:           var(--ink);
+  --color-ink-secondary: var(--ink-secondary);
+  --color-ink-muted:     var(--ink-muted);
+  --color-background:    var(--background);
+  --color-foreground:    var(--foreground);
+  --color-primary:       var(--primary);
+  --color-primary-fg:    var(--primary-fg);
+  --color-muted:         var(--muted);
+  --color-muted-fg:      var(--muted-fg);
+  --color-destructive:   var(--destructive);
+  --color-ring:          var(--ring);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: "Inter", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+}

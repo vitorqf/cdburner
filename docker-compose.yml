@@ -1,0 +1,19 @@
+services:
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    env_file: ./backend/.env
+    volumes:
+      - ./storage:/storage
+    devices:
+      - /dev/sr0:/dev/sr0
+    ports:
+      - "8000:8000"
+
+  frontend:
+    build: ./frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend

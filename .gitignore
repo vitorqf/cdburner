@@ -1,0 +1,19 @@
+# Storage (runtime data — never commit)
+storage/
+
+# Backend
+backend/.env
+backend/__pycache__/
+backend/**/__pycache__/
+backend/**/*.pyc
+*.db
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.env
+
+# General
+.DS_Store
+*.egg-info/
+.venv/
