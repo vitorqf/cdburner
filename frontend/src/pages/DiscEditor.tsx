@@ -164,6 +164,23 @@ export default function DiscEditor() {
     reorder.mutate({ dtId: active.id as string, position: newIndex + 1 });
   }
 
+  const totalSeconds = useMemo(
+    () =>
+      (disc?.tracks ?? []).reduce(
+        (acc, dt) => acc + (dt.track.duration_seconds ?? 0),
+        0,
+      ),
+    [disc?.tracks],
+  );
+  const totalBytes = useMemo(
+    () =>
+      (disc?.tracks ?? []).reduce(
+        (acc, dt) => acc + (dt.track.file_size_bytes ?? 0),
+        0,
+      ),
+    [disc?.tracks],
+  );
+
   if (isLoading || !disc) {
     return <p className="text-ink-muted text-sm">Loading...</p>;
   }
@@ -171,19 +188,6 @@ export default function DiscEditor() {
   const allReady =
     disc.tracks.length > 0 &&
     disc.tracks.every((dt) => dt.track.status === "ready");
-  const totalSeconds = useMemo(
-    () =>
-      disc.tracks.reduce(
-        (acc, dt) => acc + (dt.track.duration_seconds ?? 0),
-        0,
-      ),
-    [disc.tracks],
-  );
-  const totalBytes = useMemo(
-    () =>
-      disc.tracks.reduce((acc, dt) => acc + (dt.track.file_size_bytes ?? 0), 0),
-    [disc.tracks],
-  );
 
   return (
     <div>
