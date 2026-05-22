@@ -21,11 +21,18 @@ export function CapacityBar({ disc, totalSeconds, totalBytes }: Props) {
             {over ? "Over capacity" : `${formatDuration(capacity - totalSeconds)} remaining`}
           </span>
         </div>
-        <div className="h-1.5 bg-cream-mid rounded-full overflow-hidden">
+        <div
+          role="progressbar"
+          aria-valuenow={Math.round(pct)}
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-label="Disc capacity"
+          className="h-1.5 bg-cream-mid rounded-full overflow-hidden"
+        >
           <div
             className={cn(
               "h-full rounded-full transition-all duration-300",
-              over ? "bg-destructive" : pct > 90 ? "bg-amber-500" : "bg-sage"
+              over ? "bg-destructive" : pct > 90 ? "bg-warning" : "bg-sage"
             )}
             style={{ width: `${pct}%` }}
           />
@@ -47,11 +54,18 @@ export function CapacityBar({ disc, totalSeconds, totalBytes }: Props) {
           {over ? "Over capacity" : `${formatBytes(capacity - totalBytes)} remaining`}
         </span>
       </div>
-      <div className="h-1.5 bg-cream-mid rounded-full overflow-hidden">
+      <div
+        role="progressbar"
+        aria-valuenow={Math.round(pct)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label="Disc capacity"
+        className="h-1.5 bg-cream-mid rounded-full overflow-hidden"
+      >
         <div
           className={cn(
             "h-full rounded-full transition-all duration-300",
-            over ? "bg-destructive" : pct > 90 ? "bg-amber-500" : "bg-sage"
+            over ? "bg-destructive" : pct > 90 ? "bg-warning" : "bg-sage"
           )}
           style={{ width: `${pct}%` }}
         />

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -33,14 +33,13 @@ import type { DiscTrack } from "@/types";
 
 function SortableTrackRow({
   dt,
-  discId,
+  discId: _discId,
   onRemove,
 }: {
   dt: DiscTrack;
   discId: string;
   onRemove: () => void;
 }) {
-  console.log(discId);
   const {
     attributes,
     listeners,
@@ -60,11 +59,12 @@ function SortableTrackRow({
       )}
     >
       <button
+        aria-label="Drag to reorder"
         className="text-ink-muted cursor-grab active:cursor-grabbing touch-none"
         {...attributes}
         {...listeners}
       >
-        <GripVertical size={14} />
+        <GripVertical size={14} aria-hidden="true" />
       </button>
       <span className="text-xs text-ink-muted w-5 text-right shrink-0">
         {dt.position}
@@ -98,9 +98,10 @@ function SortableTrackRow({
       </div>
       <button
         onClick={onRemove}
+        aria-label="Remove track"
         className="text-ink-muted hover:text-destructive transition-colors shrink-0"
       >
-        <Trash2 size={14} />
+        <Trash2 size={14} aria-hidden="true" />
       </button>
     </div>
   );
@@ -170,20 +171,26 @@ export default function DiscEditor() {
   const allReady =
     disc.tracks.length > 0 &&
     disc.tracks.every((dt) => dt.track.status === "ready");
-  const totalSeconds = disc.tracks.reduce(
-    (acc, dt) => acc + (dt.track.duration_seconds ?? 0),
-    0,
+  const totalSeconds = useMemo(
+    () =>
+      disc.tracks.reduce(
+        (acc, dt) => acc + (dt.track.duration_seconds ?? 0),
+        0,
+      ),
+    [disc.tracks],
   );
-  const totalBytes = disc.tracks.reduce(
-    (acc, dt) => acc + (dt.track.file_size_bytes ?? 0),
-    0,
+  const totalBytes = useMemo(
+    () =>
+      disc.tracks.reduce((acc, dt) => acc + (dt.track.file_size_bytes ?? 0), 0),
+    [disc.tracks],
   );
 
   return (
     <div>
       {/* Header */}
-      <div className="flex items-start gap-6 mb-8">
+      <div className="flex flex-wrap sm:flex-nowrap items-start gap-6 mb-8">
         <label className="cursor-pointer shrink-0">
+          <span className="sr-only">Upload cover image</span>
           <div className="w-24 h-24 rounded bg-sage-surface flex items-center justify-center overflow-hidden hover:opacity-80 transition-opacity">
             {disc.cover_image_path ? (
               <img

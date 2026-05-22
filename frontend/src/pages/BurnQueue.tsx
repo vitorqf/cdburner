@@ -32,7 +32,7 @@ function JobCard({ job }: { job: BurnJob }) {
         {job.status === "queued" && (
           <button
             onClick={() => cancel.mutate()}
-            className="text-xs text-ink-muted hover:text-destructive transition-colors"
+            className="min-h-11 px-3 text-xs text-ink-muted hover:text-destructive transition-colors"
           >
             Cancel
           </button>
@@ -45,7 +45,14 @@ function JobCard({ job }: { job: BurnJob }) {
             <span>Burning</span>
             <span>{job.progress_percent.toFixed(0)}%</span>
           </div>
-          <div className="h-1.5 bg-cream-mid rounded-full overflow-hidden">
+          <div
+            role="progressbar"
+            aria-valuenow={Math.round(job.progress_percent)}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-label="Burn progress"
+            className="h-1.5 bg-cream-mid rounded-full overflow-hidden"
+          >
             <div
               className="h-full bg-sage transition-all duration-500"
               style={{ width: `${job.progress_percent}%` }}
@@ -64,7 +71,7 @@ function JobCard({ job }: { job: BurnJob }) {
           <button
             onClick={() => confirm.mutate()}
             disabled={confirm.isPending}
-            className="bg-sage text-primary-fg px-6 py-2 rounded text-sm font-medium hover:opacity-90 disabled:opacity-40 transition-opacity"
+            className="bg-sage text-primary-fg px-6 min-h-11 rounded text-sm font-medium hover:opacity-90 disabled:opacity-40 transition-opacity"
           >
             Confirm — disc is in the drive
           </button>

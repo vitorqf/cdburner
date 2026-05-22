@@ -46,10 +46,10 @@ function TrackRow({ track }: { track: Track }) {
       </div>
       <button
         onClick={() => del.mutate()}
-        className="text-ink-muted hover:text-destructive transition-colors shrink-0"
-        title="Delete track"
+        aria-label={`Delete ${track.title}`}
+        className="size-11 flex items-center justify-center text-ink-muted hover:text-destructive transition-colors shrink-0"
       >
-        <Trash2 size={14} />
+        <Trash2 size={14} aria-hidden="true" />
       </button>
     </div>
   );

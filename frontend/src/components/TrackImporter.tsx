@@ -60,7 +60,7 @@ export function TrackImporter({
             key={t}
             onClick={() => setTab(t)}
             className={cn(
-              "flex-1 py-2 text-xs font-medium capitalize transition-colors",
+              "flex-1 min-h-11 text-xs font-medium capitalize transition-colors",
               tab === t
                 ? "bg-sage text-primary-fg"
                 : "text-ink-secondary hover:bg-cream-mid",

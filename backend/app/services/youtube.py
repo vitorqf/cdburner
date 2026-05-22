@@ -39,12 +39,20 @@ def create_pending_tracks(url: str, db: Session) -> list[Track]:
 
     tracks = []
     for entry in entries:
+        # In flat-extraction mode webpage_url is not populated; fall back to url
+        # (the individual video URL) or construct it from the video ID.
+        vid_id = entry.get("id") or ""
+        source_url = (
+            entry.get("webpage_url")
+            or entry.get("url")
+            or (f"https://www.youtube.com/watch?v={vid_id}" if vid_id else url)
+        )
         track = Track(
             title=entry.get("title") or "Unknown",
             artist=entry.get("uploader"),
             duration_seconds=entry.get("duration"),
             source="youtube",
-            source_url=entry.get("webpage_url") or url,
+            source_url=source_url,
             status="pending",
         )
         db.add(track)

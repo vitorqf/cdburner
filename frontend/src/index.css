@@ -3,37 +3,39 @@
 /* ── CDburner Design Tokens ─────────────────────────────────────────
    Creative North Star: "The Gift Room"
    Color strategy: Committed warm sage (30-60% of surface)
-   See DESIGN.md for full system rationale.
+   All colors in OKLCH — perceptually uniform, chroma reduced at extremes.
 ──────────────────────────────────────────────────────────────────── */
 
 :root {
   /* Warm sage — the committed surface color */
-  --sage:           hsl(88 18% 44%);
-  --sage-light:     hsl(88 14% 58%);
-  --sage-muted:     hsl(88 10% 72%);
-  --sage-surface:   hsl(88 16% 92%);
+  --sage:          oklch(47% 0.08 131);
+  --sage-light:    oklch(60% 0.06 131);
+  --sage-muted:    oklch(73% 0.04 131);
+  --sage-surface:  oklch(93% 0.015 131); /* chroma reduced at high L */
 
-  /* Cream neutrals — tinted toward sage, never pure white */
-  --cream:          hsl(46 30% 96%);
-  --cream-mid:      hsl(46 18% 90%);
-  --border:         hsl(46 15% 82%);
+  /* Cream neutrals — tinted warm, never pure white */
+  --cream:         oklch(96% 0.007 88);
+  --cream-mid:     oklch(91% 0.01 88);
+  --border:        oklch(83% 0.01 88);
 
-  /* Warm darks — tinted toward brown, never pure black */
-  --ink:            hsl(30 15% 14%);
-  --ink-secondary:  hsl(30 10% 36%);
-  --ink-muted:      hsl(30 8% 54%);
+  /* Warm darks — tinted toward brown, chroma reduced at low L */
+  --ink:           oklch(17% 0.012 60);
+  --ink-secondary: oklch(38% 0.013 60);
+  --ink-muted:     oklch(57% 0.008 60);
 
   /* Semantic */
-  --background:     hsl(46 30% 96%);
-  --foreground:     hsl(30 15% 14%);
-  --primary:        hsl(88 18% 44%);
-  --primary-fg:     hsl(46 30% 96%);
-  --muted:          hsl(46 18% 90%);
-  --muted-fg:       hsl(30 8% 54%);
-  --destructive:    hsl(0 60% 44%);
-  --destructive-fg: hsl(46 30% 96%);
-  --ring:           hsl(88 18% 44%);
-  --radius:         6px;
+  --background:    oklch(96% 0.007 88);
+  --foreground:    oklch(17% 0.012 60);
+  --primary:       oklch(47% 0.08 131);
+  --primary-fg:    oklch(96% 0.007 88);
+  --muted:         oklch(91% 0.01 88);
+  --muted-fg:      oklch(57% 0.008 60);
+  --destructive:   oklch(44% 0.18 25);
+  --destructive-fg: oklch(96% 0.007 88);
+  --warning:       oklch(72% 0.14 80);
+  --warning-fg:    oklch(17% 0.012 60);
+  --ring:          oklch(47% 0.08 131);
+  --radius:        6px;
 }
 
 @theme inline {
@@ -54,17 +56,45 @@
   --color-muted:         var(--muted);
   --color-muted-fg:      var(--muted-fg);
   --color-destructive:   var(--destructive);
+  --color-destructive-fg: var(--destructive-fg);
+  --color-warning:       var(--warning);
+  --color-warning-fg:    var(--warning-fg);
   --color-ring:          var(--ring);
+
+  /* Border radius scale — maps to rounded-sm / rounded / rounded-lg */
+  --radius-sm: 4px;
+  --radius:    6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
 }
 
 @layer base {
   * {
     border-color: var(--border);
+    box-sizing: border-box;
   }
   body {
     background-color: var(--background);
     color: var(--foreground);
     font-family: "Inter", system-ui, sans-serif;
     -webkit-font-smoothing: antialiased;
+  }
+  /* Global keyboard focus ring — applies to all focusable elements */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  /* Screen-reader-only utility */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
   }
 }
