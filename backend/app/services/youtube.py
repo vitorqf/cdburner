@@ -18,8 +18,15 @@ def _ydl_opts(output_template: str) -> dict:
         "format": _FORMAT,
         "outtmpl": output_template,
         "quiet": True,
+        "no_warnings": True,
         "nocheckcertificate": True,
-        "user_agent": "Mozilla/5.0"
+        "retries": 3,
+        "fragment_retries": 3,
+        "postprocessors": [{
+            "key": "FFmpegExtractAudio",
+            "preferredcodec": "mp3",
+            "preferredquality": "320",
+        }],
     }
 
 
