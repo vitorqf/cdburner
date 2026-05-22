@@ -7,6 +7,9 @@ services:
       - ./storage:/storage
     devices:
       - /dev/sr0:/dev/sr0
+    cap_add:
+      - SYS_RESOURCE
+      - IPC_LOCK
     ports:
       - "8000:8000"
 
