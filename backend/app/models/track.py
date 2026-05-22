@@ -1,4 +1,5 @@
 from sqlalchemy import Column, String, Integer, Float, DateTime
+from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from ..db import Base
 import uuid
@@ -20,3 +21,5 @@ class Track(Base):
     error_message = Column(String, nullable=True)
     file_size_bytes = Column(Integer, nullable=True)
     created_at = Column(DateTime, server_default=func.now())
+
+    disc_tracks = relationship("DiscTrack", cascade="all, delete-orphan", back_populates="track")

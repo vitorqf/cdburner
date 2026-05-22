@@ -4,9 +4,10 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from sqlalchemy import text
 
 from .config import settings
-from .db import Base, engine
+from .db import Base, engine, SessionLocal
 from .api import tracks, discs, burn
 from .services.burner import run_burn_job
 
@@ -34,6 +35,14 @@ async def lifespan(app: FastAPI):
         path.mkdir(parents=True, exist_ok=True)
 
     Base.metadata.create_all(bind=engine)
+
+    # Remove disc_tracks rows whose track was deleted without cascade
+    db = SessionLocal()
+    try:
+        db.execute(text("DELETE FROM disc_tracks WHERE track_id NOT IN (SELECT id FROM tracks)"))
+        db.commit()
+    finally:
+        db.close()
 
     job_queue: asyncio.Queue = asyncio.Queue()
     app.state.job_queue = job_queue

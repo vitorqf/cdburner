@@ -10,9 +10,7 @@ from ..db import SessionLocal
 from ..models import Track
 from .audio import _to_cdda_wav, _extract_duration
 
-# Prefer audio-only streams in common containers; fall back to best muxed stream.
-# This covers videos that only have combined audio+video tracks (no audio-only available).
-_FORMAT = "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio[ext=opus]/bestaudio/best[ext=mp4]/best"
+_FORMAT = "bestaudio/best"
 
 
 def _ydl_opts(output_template: str) -> dict:

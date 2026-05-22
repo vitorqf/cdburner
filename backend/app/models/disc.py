@@ -34,7 +34,7 @@ class DiscTrack(Base):
     position = Column(Integer, nullable=False)
 
     disc = relationship("Disc", back_populates="tracks")
-    track = relationship("Track")
+    track = relationship("Track", back_populates="disc_tracks")
 
 
 class BurnJob(Base):
