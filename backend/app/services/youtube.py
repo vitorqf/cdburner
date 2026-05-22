@@ -1,7 +1,6 @@
 """yt-dlp wrapper: create pending Track records, then download in background."""
 import asyncio
 from pathlib import Path
-from uuid import uuid4
 
 import yt_dlp
 from sqlalchemy.orm import Session
@@ -11,14 +10,20 @@ from ..db import SessionLocal
 from ..models import Track
 from .audio import _to_cdda_wav, _extract_duration
 
+# Prefer audio-only streams in common containers; fall back to best muxed stream.
+# This covers videos that only have combined audio+video tracks (no audio-only available).
+_FORMAT = "bestaudio[ext=webm]/bestaudio[ext=m4a]/bestaudio[ext=opus]/bestaudio/best[ext=mp4]/best"
+
 
 def _ydl_opts(output_template: str) -> dict:
     return {
-        "format": "bestaudio/best",
+        "format": _FORMAT,
         "outtmpl": output_template,
         "quiet": True,
         "no_warnings": True,
         "extract_flat": False,
+        "retries": 3,           # default is 10 — cap it so one bad video doesn't flood logs
+        "fragment_retries": 3,
         "postprocessors": [],
     }
 
@@ -68,12 +73,17 @@ async def _download(track_id: str):
         db.commit()
 
         dest_stem = settings.uploads_path / f"{track_id}"
-        opts = {
-            **_ydl_opts(str(dest_stem) + ".%(ext)s"),
-            "quiet": True,
-        }
-        with yt_dlp.YoutubeDL(opts) as ydl:
-            info = ydl.extract_info(track.source_url, download=True)
+        opts = _ydl_opts(str(dest_stem) + ".%(ext)s")
+        try:
+            with yt_dlp.YoutubeDL(opts) as ydl:
+                info = ydl.extract_info(track.source_url, download=True)
+        except yt_dlp.utils.DownloadError as exc:
+            track.status = "error"
+            # Strip the yt-dlp prefix noise so the message is readable in the UI
+            msg = str(exc)
+            track.error_message = msg.removeprefix("ERROR: ").strip()
+            db.commit()
+            return
 
         # yt-dlp writes the actual extension — find the file
         downloaded = next(settings.uploads_path.glob(f"{track_id}.*"), None)
