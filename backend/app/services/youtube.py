@@ -22,9 +22,13 @@ def _ydl_opts(output_template: str) -> dict:
         "quiet": True,
         "no_warnings": True,
         "extract_flat": False,
-        "retries": 3,           # default is 10 — cap it so one bad video doesn't flood logs
+        "retries": 3,
         "fragment_retries": 3,
         "postprocessors": [],
+        # ios client is more permissive for YouTube Music / Topic channel content
+        "extractor_args": {
+            "youtube": {"player_client": ["ios", "web"]},
+        },
     }
 
 
