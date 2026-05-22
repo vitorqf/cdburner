@@ -18,15 +18,8 @@ def _ydl_opts(output_template: str) -> dict:
         "format": _FORMAT,
         "outtmpl": output_template,
         "quiet": True,
-        "no_warnings": True,
-        "extract_flat": False,
-        "retries": 3,
-        "fragment_retries": 3,
-        "postprocessors": [],
-        # ios client is more permissive for YouTube Music / Topic channel content
-        "extractor_args": {
-            "youtube": {"player_client": ["ios", "web"]},
-        },
+        "nocheckcertificate": True,
+        "user_agent": "Mozilla/5.0"
     }
 
 
